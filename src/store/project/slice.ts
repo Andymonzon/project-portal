@@ -11,19 +11,25 @@ export interface Project {
   status: string;
 }
 
-const initialState: Project[] = [];
+const getState = () => {
+  const state = localStorage.getItem("redux_project_state");
+  return state ? JSON.parse(state) : [];
+};
+
+const initialState: Project[] = getState();
 
 export const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
     addProject: (state, action: PayloadAction<Project>) => {
-      console.log(action.payload);
       state = [...state, action.payload];
+      localStorage.setItem("redux_project_state", JSON.stringify(state));
       return state;
     },
     deleteProject: (state, action: PayloadAction<string>) => {
       state = state.filter((project) => project.id !== action.payload);
+      localStorage.setItem("redux_project_state", JSON.stringify(state));
       return state;
     },
   },
