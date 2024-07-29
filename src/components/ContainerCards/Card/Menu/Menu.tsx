@@ -20,16 +20,22 @@ export const Menu = ({ openModal, setOpenModal }: Props) => {
           ref={modalRef}
           className="absolute right-5 top-9 shadow-[0px_2px_8px_0px_#00000026] w-40"
         >
-          <ul className="bg-[#00000026] rounded-md flex flex-col gap-[1px]">
-            <li className="flex p-1 bg-white">
+          <div className="bg-[#00000026] rounded-md flex flex-col gap-[1px]">
+            <button
+              onClick={(e) => console.log(e)}
+              className="flex p-1 bg-white gap-2 items-center"
+            >
               <Image src={EditIcon} alt="edit icon" />
               Edit
-            </li>
-            <li className="flex p-1 bg-white">
+            </button>
+            <button
+              onClick={(e) => console.log(e)}
+              className="flex p-1 bg-white gap-2 items-center"
+            >
               <Image src={DeleteIcon} alt="delete icon" />
               Delete
-            </li>
-          </ul>
+            </button>
+          </div>
         </div>
       )}
     </>
