@@ -1,10 +1,11 @@
 import { Navbar } from "@/components/Navbar/Navbar";
 import { ContainerCards } from "../components/ContainerCards/ContainerCards";
+import { types } from "@/models/navbar.model";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Navbar type={types.HOME} />
       <main className="flex flex-col items-center justify-between">
         <ContainerCards />
       </main>
