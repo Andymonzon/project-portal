@@ -3,8 +3,14 @@
 import { useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { Menu } from "./Menu/Menu";
+import { Project } from "@/store/project/slice";
 
-export const Card = () => {
+type Props = {
+  data: Project;
+};
+
+export const Card = ({ data }: Props) => {
+  console.log(data);
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -15,13 +21,15 @@ export const Card = () => {
     <article className="flex flex-col gap-2 p-2 bg-white px-5 relative">
       <div className="flex justify-between">
         <div className="flex flex-col">
-          <h3>Card title</h3>
-          <span className="text-xs text-[#00000073]">card date</span>
+          <h3>{data.projectName}</h3>
+          <span className="text-xs text-[#00000073]">
+            {JSON.stringify(data.createdAt).split('"')[1]}
+          </span>
         </div>
         <button onClick={handleOpenModal}>
           <HiDotsVertical />
         </button>
-        <Menu setOpenModal={setOpenModal} openModal={openModal} />
+        <Menu id={data.id} setOpenModal={setOpenModal} openModal={openModal} />
       </div>
       <div className="flex items-center gap-2">
         {/* cambiar esto */}
@@ -30,7 +38,7 @@ export const Card = () => {
           alt=""
           className="w-10 h-10 rounded-full"
         />
-        <p className="text-sm">User Name</p>
+        <p className="text-sm">{data.name}</p>
       </div>
     </article>
   );
