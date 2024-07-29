@@ -21,7 +21,7 @@ export const Card = () => {
         <button onClick={handleOpenModal}>
           <HiDotsVertical />
         </button>
-        <Menu openModal={openModal} />
+        <Menu setOpenModal={setOpenModal} openModal={openModal} />
       </div>
       <div className="flex items-center gap-2">
         {/* cambiar esto */}
