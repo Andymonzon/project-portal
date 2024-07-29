@@ -10,7 +10,6 @@ type Props = {
 };
 
 export const Card = ({ data }: Props) => {
-  console.log(data);
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -35,7 +34,7 @@ export const Card = ({ data }: Props) => {
         {/* cambiar esto */}
         <img
           src="https://via.placeholder.com/150"
-          alt=""
+          alt="user image"
           className="w-10 h-10 rounded-full"
         />
         <p className="text-sm">{data.name}</p>

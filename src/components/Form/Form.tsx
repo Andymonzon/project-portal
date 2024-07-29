@@ -2,9 +2,11 @@
 
 import { useAppDispatch } from "@/hooks/store";
 import { addProject, Project } from "@/store/project/slice";
+import { useRouter } from "next/navigation";
 
 export const Form = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -32,6 +34,7 @@ export const Form = () => {
       status,
     };
     dispatch(addProject(newProject));
+    router.push("/");
   };
 
   return (

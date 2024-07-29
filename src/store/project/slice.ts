@@ -11,17 +11,15 @@ export interface Project {
   status: string;
 }
 
-const getState = () => {
-  const state = localStorage.getItem("redux_project_state");
-  return state ? JSON.parse(state) : [];
-};
-
-const initialState: Project[] = getState();
+const initialState: Project[] = [];
 
 export const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
+    initializeState: (state, action: PayloadAction<Project[]>) => {
+      return action.payload;
+    },
     addProject: (state, action: PayloadAction<Project>) => {
       state = [...state, action.payload];
       localStorage.setItem("redux_project_state", JSON.stringify(state));
@@ -34,6 +32,16 @@ export const projectSlice = createSlice({
     },
   },
 });
+
+export const loadStateFromLocalStorage = () => {
+  return (dispatch: any) => {
+    if (typeof window !== "undefined") {
+      const storedState = localStorage.getItem("redux_project_state");
+      const state = storedState ? JSON.parse(storedState) : [];
+      dispatch(projectSlice.actions.initializeState(state));
+    }
+  };
+};
 
 export default projectSlice.reducer;
 

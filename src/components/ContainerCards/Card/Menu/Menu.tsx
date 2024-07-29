@@ -16,6 +16,7 @@ export const Menu = ({ openModal, setOpenModal, id }: Props) => {
   const modalRef = useRef(null);
   const dispatch = useAppDispatch();
   const handleDelete = () => {
+    setOpenModal(false);
     dispatch(deleteProject(id));
   };
 
