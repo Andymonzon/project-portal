@@ -6,7 +6,7 @@ export interface Project {
   createdAt: Date;
   description: string;
   projectName: string;
-  asiggnedTo: string;
+  assignedTo: string;
   projectManager: string;
   status: string;
 }
@@ -30,6 +30,16 @@ export const projectSlice = createSlice({
       localStorage.setItem("redux_project_state", JSON.stringify(state));
       return state;
     },
+    editProject: (state, action: PayloadAction<Project>) => {
+      state = state.map((project) => {
+        if (project.id === action.payload.id) {
+          return action.payload;
+        }
+        return project;
+      });
+      localStorage.setItem("redux_project_state", JSON.stringify(state));
+      return state;
+    },
   },
 });
 
@@ -45,4 +55,4 @@ export const loadStateFromLocalStorage = () => {
 
 export default projectSlice.reducer;
 
-export const { addProject, deleteProject } = projectSlice.actions;
+export const { addProject, deleteProject, editProject } = projectSlice.actions;
