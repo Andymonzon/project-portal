@@ -4,17 +4,23 @@ import { useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { Menu } from "./Menu/Menu";
 import { Project } from "@/store/project/slice";
+import { DeleteModal } from "./DeleteModal/DeleteModal";
+import Image from "next/image";
 
 type Props = {
   projects: Project[];
 };
 
 export const Card = ({ projects }: Props) => {
-  const [openModal, setOpenModal] = useState({ isOpen: false, id: "" });
+  const [openMenu, setOpenMenu] = useState({ isOpen: false, id: "" });
   const [screenSize, setScreenSize] = useState("desktop");
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState({
+    isOpen: false,
+    id: "",
+  });
 
   const handleOpenModal = (id: string) => {
-    setOpenModal({ isOpen: true, id });
+    setOpenMenu({ isOpen: true, id });
   };
   return (
     <>
@@ -26,8 +32,8 @@ export const Card = ({ projects }: Props) => {
           <div className="flex justify-between relative">
             <div className="flex flex-col">
               <h3>{data.projectName}</h3>
-              <span className="text-xs text-[#00000073]">
-                {JSON.stringify(data.createdAt).split('"')[1]}
+              <span className="text-xs text-[#00000073] font-semibold">
+                Creation date: {new Date(data.createdAt).toLocaleDateString()}
               </span>
             </div>
             <button
@@ -40,62 +46,78 @@ export const Card = ({ projects }: Props) => {
             </button>
             {screenSize === "mobile" && (
               <Menu
-                openModal={openModal}
-                setOpenModal={setOpenModal}
+                setIsOpenDeleteModal={setIsOpenDeleteModal}
+                openMenu={openMenu}
+                setOpenMenu={setOpenMenu}
                 id={data.id}
               />
             )}
           </div>
           <div className="flex items-center gap-2">
-            {/* cambiar esto */}
-            <img
+            <Image
               src="https://via.placeholder.com/150"
               alt="user image"
               className="w-10 h-10 rounded-full"
+              height={150}
+              width={150}
             />
             <p className="text-sm">{data.name}</p>
           </div>
         </article>
       ))}
       <div className="hidden lg:flex items-center justify-center h-full w-full px-20">
-        <table className="w-full xl:w-3/4 xl:h-3/4 2xl:h-4/5 bg-white border border-gray-200">
+        <table className="w-full xl:w-3/4 h-max bg-white border border-gray-200 shadow-[0px_2px_8px_0px_#00000066]">
           <thead className="bg-gray-100">
             <tr>
-              <th className="py-2 px-4 border-b">Project Info</th>
-              <th className="py-2 px-4 border-b">Project Manager</th>
-              <th className="py-2 px-4 border-b">Assigned To</th>
-              <th className="py-2 px-4 border-b">Status</th>
-              <th className="py-2 px-4 border-b">Action</th>
+              <th className="py-2 px-4 border-b text-start">Project Info</th>
+              <th className="py-2 px-4 border-b text-start">Project Manager</th>
+              <th className="py-2 px-4 border-b text-start">Assigned To</th>
+              <th className="py-2 px-4 border-b text-start">Status</th>
+              <th className="py-2 px-4 border-b text-start">Action</th>
             </tr>
           </thead>
           <tbody>
             {projects.map((data) => (
               <tr key={data.id}>
-                <td className="text-center py-2 border-b">
-                  {data.projectName}
+                <td className="text-start py-2 border-b">
+                  <div className="flex px-4 flex-col">
+                    <p className="w-max">{data.projectName}</p>
+                    <span className="w-max text-xs text-[#00000073] font-semibold">
+                      Creation date:{" "}
+                      {new Date(data.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </td>
                 <td className="border-b">
-                  <div className="flex items-center justify-center gap-2 py-2">
-                    <img
+                  <div className="flex items-center justify-start px-4 gap-2 py-2">
+                    <Image
                       src="https://via.placeholder.com/150"
                       alt="user image"
                       className="w-10 h-10 rounded-full"
+                      height={150}
+                      width={150}
                     />
                     {data.projectManager}
                   </div>
                 </td>
                 <td className="border-b">
-                  <div className="flex items-center justify-center gap-2 py-2">
-                    <img
+                  <div className="flex items-center justify-start px-4 gap-2 py-2">
+                    <Image
                       src="https://via.placeholder.com/150"
                       alt="user image"
                       className="w-10 h-10 rounded-full"
+                      height={150}
+                      width={150}
                     />
                     {data.assignedTo}
                   </div>
                 </td>
-                <td className="text-center py-2 border-b">{data.status}</td>
-                <td className="py-2 px-4 border-b text-center">
+                <td className="text-start py-2 border-b px-4">
+                  <div className="px-2 py-1 bg-[#BDBDBD] w-28 text-center rounded">
+                    <p>{data.status}</p>
+                  </div>
+                </td>
+                <td className="py-2 px-8 border-b text-start">
                   <div className="relative">
                     <button
                       onClick={() => {
@@ -108,8 +130,9 @@ export const Card = ({ projects }: Props) => {
                     {screenSize === "desktop" && (
                       <Menu
                         id={data.id}
-                        setOpenModal={setOpenModal}
-                        openModal={openModal}
+                        setOpenMenu={setOpenMenu}
+                        setIsOpenDeleteModal={setIsOpenDeleteModal}
+                        openMenu={openMenu}
                       />
                     )}
                   </div>
@@ -119,6 +142,12 @@ export const Card = ({ projects }: Props) => {
           </tbody>
         </table>
       </div>
+      {isOpenDeleteModal.isOpen && (
+        <DeleteModal
+          id={isOpenDeleteModal.id}
+          setIsOpenDeleteModal={setIsOpenDeleteModal}
+        />
+      )}
     </>
   );
 };

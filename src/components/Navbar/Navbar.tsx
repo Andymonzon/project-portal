@@ -1,6 +1,8 @@
 "use client";
 
+import { useAppDispatch } from "@/hooks/store";
 import { types } from "@/models/navbar.model";
+import { searchProjects } from "@/store/project/slice";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
 import { TiPlus } from "react-icons/ti";
@@ -9,10 +11,22 @@ interface Props {
   type: types;
 }
 export const Navbar = ({ type }: Props) => {
+  const dispatch = useAppDispatch();
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(searchProjects(e.target.value));
+  };
+
   return (
     <div className="bg-white">
-      <div className="border-b-2 border-[#BDBDBD] px-5 py-2">
-        <h1 className="text-[#BDBDBD]">ProjectPortal</h1>
+      <div className="border-b-2 border-[#BDBDBD] px-5 py-2 flex justify-between">
+        <h1 className="font-bold">ProjectPortal</h1>
+        <input
+          type="text"
+          className="outline-none bg-[#BDBDBD] rounded w-1/2 md:w-1/4 px-2"
+          placeholder="Search..."
+          onChange={handleSearch}
+        />
       </div>
       <div className="flex justify-between px-5 py-2 items-center border-b-2 border-[#BDBDBD]">
         <div className="flex gap-2">

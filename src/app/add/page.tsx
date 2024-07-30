@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <Navbar type={types.ADD} />
-      <main className="bg-white">
+      <main className="flex items-center justify-center h-full">
         <Form />
       </main>
     </>

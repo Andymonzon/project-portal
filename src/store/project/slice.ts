@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface Project {
   id: string;
   name: string;
-  createdAt: Date;
+  createdAt: string;
   description: string;
   projectName: string;
   assignedTo: string;
@@ -17,42 +17,49 @@ export const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
-    initializeState: (state, action: PayloadAction<Project[]>) => {
+    initializeState: (_state, action: PayloadAction<Project[]>) => {
       return action.payload;
     },
     addProject: (state, action: PayloadAction<Project>) => {
-      state = [...state, action.payload];
-      localStorage.setItem("redux_project_state", JSON.stringify(state));
-      return state;
+      const newState = [action.payload, ...state];
+      localStorage.setItem("redux_project_state", JSON.stringify(newState));
+      return newState;
     },
     deleteProject: (state, action: PayloadAction<string>) => {
-      state = state.filter((project) => project.id !== action.payload);
-      localStorage.setItem("redux_project_state", JSON.stringify(state));
-      return state;
+      const newState = state.filter((project) => project.id !== action.payload);
+      localStorage.setItem("redux_project_state", JSON.stringify(newState));
+      return newState;
     },
     editProject: (state, action: PayloadAction<Project>) => {
-      state = state.map((project) => {
+      const newState = state.map((project) => {
         if (project.id === action.payload.id) {
           return action.payload;
         }
         return project;
       });
-      localStorage.setItem("redux_project_state", JSON.stringify(state));
-      return state;
+      localStorage.setItem("redux_project_state", JSON.stringify(newState));
+      return newState;
+    },
+    searchProjects: (_state, action: PayloadAction<string>) => {
+      const storedProjects = JSON.parse(
+        localStorage.getItem("redux_project_state") || "[]"
+      ) as Project[];
+      if (action.payload === "") {
+        return storedProjects;
+      }
+      return storedProjects.filter((project) =>
+        project.projectName.toLowerCase().includes(action.payload.toLowerCase())
+      );
     },
   },
 });
 
-export const loadStateFromLocalStorage = () => {
-  return (dispatch: any) => {
-    if (typeof window !== "undefined") {
-      const storedState = localStorage.getItem("redux_project_state");
-      const state = storedState ? JSON.parse(storedState) : [];
-      dispatch(projectSlice.actions.initializeState(state));
-    }
-  };
-};
-
 export default projectSlice.reducer;
 
-export const { addProject, deleteProject, editProject } = projectSlice.actions;
+export const {
+  addProject,
+  deleteProject,
+  editProject,
+  searchProjects,
+  initializeState,
+} = projectSlice.actions;

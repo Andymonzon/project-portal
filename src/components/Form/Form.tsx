@@ -58,7 +58,7 @@ export const Form = ({ data }: Props) => {
 
     const newProject: Project = {
       id: data ? data.id : crypto.randomUUID(),
-      createdAt: data ? data.createdAt : new Date(),
+      createdAt: data ? data.createdAt : new Date().toISOString(),
       name: "Andy",
       ...formValues,
     };
@@ -70,7 +70,7 @@ export const Form = ({ data }: Props) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="px-5 py-2 flex flex-col gap-4 mt-2 bg-white w-full h-max lg:w-3/4 xl:w-3/4"
+      className="px-5 py-2 flex flex-col gap-4 mt-2 bg-white w-full h-max lg:w-3/4 xl:w-3/4 rounded"
     >
       <div className="flex flex-col">
         <label>Project Name</label>

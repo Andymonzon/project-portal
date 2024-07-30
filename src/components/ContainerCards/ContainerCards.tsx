@@ -3,7 +3,7 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/store";
 import { Card } from "./Card/Card";
 import { useEffect } from "react";
-import { loadStateFromLocalStorage } from "@/store/project/slice";
+import { initializeState } from "@/store/project/slice";
 import { Pagination } from "../Pagination/Pagination";
 import { useSearchParams } from "next/navigation";
 
@@ -16,13 +16,19 @@ export const ContainerCards = () => {
   const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
   useEffect(() => {
-    dispatch(loadStateFromLocalStorage());
+    const localStorageProjects = JSON.parse(
+      localStorage.getItem("redux_project_state") || "[]"
+    );
+    if (localStorageProjects) {
+      dispatch(initializeState(localStorageProjects));
+    }
   }, []);
 
   const currentProjects = projects.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
   const totalPages = Math.ceil(projects.length / itemsPerPage);
 
   return (
